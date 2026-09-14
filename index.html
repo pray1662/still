@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f2ed" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#171715" media="(prefers-color-scheme: dark)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Still" />
+  <meta name="description" content="A minimal Pomodoro timer for focused work." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Still</title>
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <header class="topbar">
+      <div class="brand" aria-label="Still Pomodoro timer">Still</div>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span aria-hidden="true">◐</span>
+      </button>
+    </header>
+
+    <section class="timer-shell" aria-label="Pomodoro timer">
+      <div id="modeLabel" class="mode-label">Focus</div>
+
+      <div class="ring-wrap">
+        <svg class="progress-ring" viewBox="0 0 260 260" role="img" aria-label="Session progress">
+          <circle class="ring-track" cx="130" cy="130" r="116" />
+          <circle id="progressCircle" class="ring-progress" cx="130" cy="130" r="116" />
+        </svg>
+        <button id="timerButton" class="timer-button" type="button" aria-label="Start timer">
+          <span id="timeDisplay" class="time-display">25:00</span>
+          <span id="timerHint" class="timer-hint">Start</span>
+        </button>
+      </div>
+
+      <div class="controls" role="group" aria-label="Timer controls">
+        <button id="resetButton" class="text-button" type="button">Reset</button>
+        <button id="skipButton" class="text-button" type="button">Skip</button>
+      </div>
+
+      <div id="sessionDots" class="session-dots" aria-label="Pomodoro progress">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+
+      <nav class="presets" aria-label="Timer presets">
+        <button class="preset active" data-mode="focus" type="button">Focus <span>25</span></button>
+        <button class="preset" data-mode="short" type="button">Short break <span>5</span></button>
+        <button class="preset" data-mode="long" type="button">Long break <span>15</span></button>
+      </nav>
+    </section>
+
+    <footer class="footer">
+      <button id="soundToggle" class="quiet-button" type="button" aria-pressed="true">Sound on</button>
+      <span class="footer-separator">·</span>
+      <button id="autoToggle" class="quiet-button" type="button" aria-pressed="false">Auto-start off</button>
+    </footer>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
