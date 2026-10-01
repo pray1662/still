@@ -29,6 +29,33 @@ let duration = remaining;
 let running = false;
 let endAt = null;
 let tickId = null;
+let wakeLock = null;
+
+async function requestWakeLock() {
+  if (!running || document.hidden || !('wakeLock' in navigator) || wakeLock) return;
+
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+
+    wakeLock.addEventListener('release', () => {
+      wakeLock = null;
+    });
+  } catch (_) {
+    wakeLock = null;
+  }
+}
+
+async function releaseWakeLock() {
+  if (!wakeLock) return;
+
+  try {
+    await wakeLock.release();
+  } catch (_) {
+    // It may already have been released by the browser.
+  } finally {
+    wakeLock = null;
+  }
+}
 let soundOn = localStorage.getItem('still-sound') !== 'off';
 let autoStart = localStorage.getItem('still-auto') === 'on';
 
@@ -69,6 +96,7 @@ function start() {
   running = true;
   endAt = Date.now() + remaining * 1000;
   tickId = window.setInterval(tick, 250);
+  requestWakeLock();
   tick();
 }
 
@@ -79,6 +107,7 @@ function pause() {
   endAt = null;
   window.clearInterval(tickId);
   tickId = null;
+  releaseWakeLock();
   updateUI();
 }
 
@@ -193,7 +222,10 @@ autoToggle.addEventListener('click', () => {
 });
 
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && running) tick();
+  if (!document.hidden && running) {
+    tick();
+    requestWakeLock();
+  }
 });
 
 window.addEventListener('keydown', event => {
